@@ -122,7 +122,7 @@ public void setCurrentColor(Color color) {
 	currentColor=color;
 }
 
-public void choseColor(WildCard wildCard) {
+public void chooseColorAndSet(WildCard wildCard) {
 	Color chosenColor= GameSession.askForColor();
 	wildCard.setColor(chosenColor);
 	currentColor=chosenColor;

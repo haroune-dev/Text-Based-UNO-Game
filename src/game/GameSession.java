@@ -20,6 +20,7 @@ public void run() {
 	while(play==1) {
 			roundNumber=1;
 			newRound=1;
+			typeWriter("========== UNO GAME ==========", 200);
 			showMessage("the game modes");
 			showMessage("1. Playeer VS Compuer");
 			showMessage("2. Two Players");
@@ -102,7 +103,6 @@ public static Color AskForColor() {
 public void printGameState(player player) { 
     System.out.print("\033[H\033[2J");
     System.out.flush();
-    typeWriter("========== UNO GAME ==========", 50);
 	System.out.println("it is your turn : "+player.getName);
 	Thread.sleep(2000);
 	System.out.println("the top card is"+controller.getCurrentCard());
@@ -142,10 +142,10 @@ public void showMessage(String string) {
 }
 public void typeWriter(String text, int delay) {
     for (char c : text.toCharArray()) {
-        showMessage(String.valueOf(c));
+        System.out.print(String.valueOf(c));
         try { Thread.sleep(delay); } catch (Exception e) {}
     }
-    showMessage("\n");
+    System.out.println("\n");
 }
 
 
