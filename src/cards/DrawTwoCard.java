@@ -21,6 +21,7 @@ public class DrawTwoCard extends ColoredCard implements Actionable  {
     @Override
     public void applyEffect(GameController controller) {
         controller.drawCards(2);
+        controller.setCurrentColor(getColor());
     }
 
     @Override

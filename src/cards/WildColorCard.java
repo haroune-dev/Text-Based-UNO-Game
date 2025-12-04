@@ -10,7 +10,7 @@ public class WildColorCard extends WildCard implements Actionable {
     }
     @Override
     public void applyEffect(GameController controller) {
-        controller.chooseColor(this);
+        controller.chooseColorAndSet(this);
     }
 
     @Override

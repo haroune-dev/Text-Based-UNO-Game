@@ -71,7 +71,7 @@ public void nextTurn() {
 	}
 }
 
-public boolean isValidMove(card card) {
+public boolean isValidMove(Card card) {
 	return card.matches(currentCard,currentColor);
 }
 

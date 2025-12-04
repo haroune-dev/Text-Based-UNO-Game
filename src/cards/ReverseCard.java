@@ -21,6 +21,7 @@ public class ReverseCard extends ColoredCard implements Actionable {
     @Override
     public void applyEffect(GameController controller) {
         controller.reverseDirection();
+        controller.setCurrentColor(getColor());
     }
 
     @Override

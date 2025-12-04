@@ -1,7 +1,7 @@
 package cards;
 
 import enumTypes.Color;
-import game.GameController;
+
 public abstract class WildCard extends Card {
     protected Color chosenColor;
     public void setColor(Color color) {
