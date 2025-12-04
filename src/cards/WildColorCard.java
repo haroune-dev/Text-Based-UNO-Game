@@ -1,0 +1,20 @@
+package cards;
+
+import enumTypes.Color;
+import game.GameController;
+
+public class WildColorCard extends WildCard implements Actionable {
+    @Override
+    public boolean matches(Card topCard, Color currentColor) {
+        return true;
+    }
+    @Override
+    public void applyEffect(GameController controller) {
+        controller.chooseColor(this);
+    }
+
+    @Override
+    public String toString() {
+        return "WILD (" + chosenColor + ")";
+    }
+}
