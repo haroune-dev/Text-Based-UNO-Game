@@ -2,7 +2,7 @@ package cards;
 
 import enumTypes.Color;
 import game.GameController;
-public class DrawTwoCard extends ColoredCard implements Actionable  {
+public class DrawTwoCard extends ColoredCard{
 
     public DrawTwoCard(Color color) {
         super(color);

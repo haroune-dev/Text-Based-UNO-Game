@@ -3,7 +3,7 @@ package cards;
 import enumTypes.Color;
 import game.GameController;
 
-public class WildColorCard extends WildCard implements Actionable {
+public class WildColorCard extends WildCard{
     @Override
     public boolean matches(Card topCard, Color currentColor) {
         return true;

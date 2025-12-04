@@ -2,7 +2,7 @@ package cards;
 
 import enumTypes.Color;
 import game.GameController;
-public class ReverseCard extends ColoredCard implements Actionable {
+public class ReverseCard extends ColoredCard {
 
     public ReverseCard(Color color) {
         super(color);

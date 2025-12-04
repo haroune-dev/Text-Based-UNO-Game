@@ -2,7 +2,7 @@ package cards;
 
 import enumTypes.Color;
 import game.GameController;
-public class SkipCard extends ColoredCard implements Actionable {
+public class SkipCard extends ColoredCard{
 
     public SkipCard(Color color) {
         super(color);
