@@ -2,7 +2,7 @@ package cards;
 
 import enumTypes.Color;
 import game.GameController;
-public class WildColorDrawFourCar extends WildCard {
+public class WildColorDrawFourCard extends WildCard {
     @Override
     public boolean matches(Card topCard, Color currentColor) {
         return true;

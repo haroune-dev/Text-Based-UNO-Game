@@ -1,32 +1,31 @@
 package player;
 
 import java.util.ArrayList;
+import cards.*;
+
 
 public class PlayerHand {
-    // attribute
-    private ArrayList<Card> List = new ArrayList();  // List of cards in the hand
-
-    // method
-    // All checks are performed on the main page
-
+    
+    private ArrayList<Card> List = new ArrayList<>(); 
+    
     public void addCard(Card X) {
-        List.add(X);  // Add a card to the hand
+        List.add(X);  
     }
 
     public void removeCard(Card X) {
-        List.remove(X);  // Remove a card from the hand
+        List.remove(X);  
     }
 
     public int handsize() {
-        return List.size();  // Return number of cards in hand
+        return List.size(); 
     }
 
     public boolean isEmpty() {
-        return List.isEmpty();  // Check if hand is empty
+        return List.isEmpty();  
     }
 
     public ArrayList<Card> getPlayerHand(){
-        return this.List;  // Return list of cards
+        return this.List;  
     }
 }
 

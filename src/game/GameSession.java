@@ -1,6 +1,8 @@
 package game;
 import java.util.Scanner;
 import cards.*;
+import deck.DiscardPile;
+import deck.DrawPile;
 import java.util.ArrayList;
 import enumTypes.Color;
 import player.*;
@@ -55,13 +57,12 @@ public void run() {
 
 public void handlePlayerTurn(Player player) {
 	int chosenCardIndex;
-	int chosenColorIndex;
 	Card chosenCard;
 	Card withdrawncard;
 	printGameState(player);
-	if(player.getHand().hasCard()) {
-	chosenCardIndex=getInput("chose a card",1,player.playableCardsSize);
-	chosenCard=player.getHand().playableCards().get(chosenCardIndex);
+	if(player.hasPlayableCard(controller.getCurrentCard(), controller.getCurrentColor())) {
+	chosenCardIndex=getInput("chose a card ",1,player.playableHandSize(controller.getCurrentCard(), controller.getCurrentColor()));
+	chosenCard=player.PlayableCards(controller.getCurrentCard(), controller.getCurrentColor()).get(chosenCardIndex-1);
 	controller.handlePlayerCard(chosenCard);
 	}else {
 		withdrawncard=controller.drawACard();
@@ -75,7 +76,7 @@ public void handlePlayerTurn(Player player) {
 	}
 }
 	
-public static Color AskForColor() {
+public static Color askForColor() {
 	int chosenCardIndex;
 	Scanner scanner=new Scanner(System.in);
 	System.out.println("chose a color for the wild card (Enter its index)");
@@ -101,28 +102,48 @@ public static Color AskForColor() {
 	}
 	return Color.RED;
 }
-public void printGameState(player player) { 
+public void printGameState(Player player){ 
     System.out.print("\033[H\033[2J");
     System.out.flush();
-	System.out.println("it is your turn : "+player.getName);
-	Thread.sleep(2000);
-	System.out.println("the top card is"+controller.getCurrentCard());
-	Thread.sleep(2000);
-	System.out.println("your card are"+player.getHand().getPlayerHand());
-	Thread.sleep(2000);
-	if(player.hasPlayableCard) {
-	System.out.println("your playabale cars are"+player.getHand().getPlayableCards());
+	System.out.println("it is your turn : "+player.getName());
+	try {
+        Thread.sleep(700); 
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+	System.out.println("the top card is "+controller.getCurrentCard());
+	try {
+        Thread.sleep(2000); 
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+	System.out.println("your card are "+player.getHand().getPlayerHand());
+	try {
+        Thread.sleep(2000); 
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+	if(player.hasPlayableCard(controller.getCurrentCard(), controller.getCurrentColor())) {
+	System.out.println("your playabale cards are "+player.PlayableCards(controller.getCurrentCard(), controller.getCurrentColor()));
 	}else {
 		showMessage("you dont hava any playable cards!");
-		Thread.sleep(2000);
+		try {
+	        Thread.sleep(2000); 
+	    } catch (InterruptedException e) {
+	        Thread.currentThread().interrupt();
+	    }
 		showMessage("you hava to take a card from the draw pile");
-		Thread.sleep(3000);
+		try {
+	        Thread.sleep(2000); 
+	    } catch (InterruptedException e) {
+	        Thread.currentThread().interrupt();
+	    }
 		showMessage("DONE");
 		
 	}
 	}
-public void printGameState(card withdrawncard) {
-		System.out.println("Your withdrawncard is"+withdrawncard);
+public void printGameState(Card withdrawncard) {
+		System.out.println("Your withdrawn card is "+withdrawncard);
 		if(controller.isValidMove(withdrawncard)) {
 			showMessage("You can play by it!");
 		}else {

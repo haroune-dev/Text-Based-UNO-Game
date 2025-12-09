@@ -1,9 +1,7 @@
 package deck;
 
 import java.util.ArrayList;
-// import cards.*;
-
-// import javax.smartcardio.Card;
+import cards.*;
 
 public abstract class Deck {
     protected ArrayList<Card> cards;
@@ -17,12 +15,10 @@ public abstract class Deck {
     }
 
     public Card getTopCard(){
-        if (cards.isEmpty()) return null;
         return cards.get(cards.size()-1);
     }
 
     public Card removeTopCard (){
-        if (cards.isEmpty()) return null;
         return cards.remove(cards.size()-1);
     }
 

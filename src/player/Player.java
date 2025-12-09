@@ -1,37 +1,33 @@
 package player;
 import java.util.ArrayList;
+import cards.*;
+
+import enumTypes.Color;
 
 public class Player {
     
-    // attribute
-    private String name;          // Player's name
-    private int score;            // Player's score
-    private PlayerHand hand = new PlayerHand(); // Player's hand
+    private String name;
+    private int score;          
+    private PlayerHand hand = new PlayerHand(); 
     
-    
-    //method
     public Player(String name){
-        this.name = name;  // Set player name
+        this.name = name; 
     }
 
     public String getName(){
-        return this.name;  // Return player name
+        return this.name; 
     }
 
     public int getScore() {
-        return this.score; // Return score
-    }
-
-    public ArrayList<Card> getPlayerHand() {
-        return this.hand.getPlayerHand(); // Get player's cards
+        return this.score;
     }
     
-    public ArrayList<Card> PlayableCard(Card card, Color color) {
-        ArrayList<Card> Phand = this.hand.getPlayerHand();   // All cards in hand
-        ArrayList<Card> PlayableHand = new ArrayList();      // Cards that can be played
+    public ArrayList<Card> PlayableCards(Card card, Color color) {
+        ArrayList<Card> Phand = this.hand.getPlayerHand();
+        ArrayList<Card> PlayableHand = new ArrayList<>(); 
         
         for(Card i: Phand) {
-            if(i.matches(card,color)) {  // Check if card is playable
+            if(i.matches(card,color)) { 
                 PlayableHand.add(i);
             }
         }   
@@ -39,30 +35,30 @@ public class Player {
     }
     
     public int playableHandSize(Card card, Color color){
-        return this.PlayableCard(card,color).size(); // Number of playable cards
+        return this.PlayableCards(card,color).size();
     }
     
     public boolean hasPlayableCard(Card card, Color color) {
         if(this.playableHandSize(card, color) > 0) {
-            return true;  // At least one playable card
+            return true;  
         }
         return false;
     }
     
     public PlayerHand getHand() {
-        return this.hand;  // Return PlayerHand object
+        return this.hand; 
     }
     
     public void setScore(int score) {
-        this.score = score; // Set score
+        this.score = score; 
     }
 
     public void incrementScore(int score){
-        this.score += score; // Add to score
+        this.score += score;
     }
     
     public boolean hasWon() {
-        return hand.isEmpty(); // True if hand is empty
+        return hand.isEmpty();
     }
 }
 
