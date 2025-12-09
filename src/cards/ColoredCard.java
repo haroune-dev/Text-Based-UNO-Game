@@ -1,6 +1,7 @@
 package cards;
 
 import enumTypes.Color;
+import game.GameSession;
 public abstract class ColoredCard extends Card {
     protected Color color;
 
@@ -9,5 +10,9 @@ public abstract class ColoredCard extends Card {
     }
     public Color getColor() {
         return color;
+    }
+    @Override
+    public String display(GameSession session) {
+        return session.colorize(this.toString(), color);
     }
 }

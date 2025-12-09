@@ -1,14 +1,19 @@
 package cards;
 
 import enumTypes.Color;
+import game.GameSession;
 
 public abstract class WildCard extends Card {
-    protected Color chosenColor;
+    protected Color chosenColor=Color.Black;
     public void setColor(Color color) {
         this.chosenColor = color;
     }
     public Color getChosenColor() {
         return chosenColor;
+    }
+    @Override
+    public String display(GameSession session) {
+        return session.colorize(this.toString(), chosenColor);
     }
 }
 

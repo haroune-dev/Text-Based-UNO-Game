@@ -132,7 +132,7 @@ public boolean checkWinCondition() {
 
 public void creatDeck(DrawPile drawPile) {
 	
-	Color[] allColor = Color.values();
+	Color[] allColor = {Color.RED,Color.BLUE,Color.GREEN,Color.YELLOW};
 	Number[] allNumber = Number.values();
 	Color color;
 	Number number;
