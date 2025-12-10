@@ -21,6 +21,10 @@ public static final String YELLOW  = "\u001B[33m";
 public static final String BLUE    = "\u001B[34m";
 public static final String WHITE   = "\u001B[37m";
 
+public static final String BRIGHT_CYAN    = "\u001B[96m";
+public static final String BRIGHT_YELLOW  = "\u001B[93m";
+public static final String BRIGHT_WHITE   = "\u001B[97m";
+
 public static final String BG_BLACK   = "\u001B[40m";
 public static final String BG_RED     = "\u001B[41m";
 public static final String BG_GREEN   = "\u001B[42m";
@@ -80,13 +84,18 @@ public void run() {
 			handlePlayerTurn(controller.getCurrentPlayer());
 			}
 		Player winner = controller.getCurrentPlayer();
-		showMessage(YELLOW+" 🏆 "+RESET+BOLD+"Congratulation"+winner.getName());
+		showMessage(YELLOW+" 🏆 "+RESET+BOLD+" Congratulation " +BG_BLACK +BRIGHT_YELLOW +winner.getName() +RESET);
 		winner.incrementScore(500);
-		showMessage(winner.getName()+"Your Score now is"+String.valueOf(winner.getScore()));
+		showMessage(BOLD + winner.getName() + " Score: "+BG_BLACK + BRIGHT_YELLOW + winner.getScore() + RESET);
 		newRound=getInput("play a new Round"+GREEN+ "[1] yse "+RESET+ RED +"[0] exit "+RESET,0,1);
 	}
-			play=getInput("Start new game with new playes enter"+GREEN+ "[1] yse "+RESET+ RED +"[0] exit "+RESET,0,1);
+			play=getInput(BOLD+"Start new game with new playes enter"+RESET +GREEN+ "[1] yse "+RESET+ RED +"[0] exit "+RESET,0,1);
 }
+		clearScreen();
+	    showMessage(BOLD+" Thanks for playing UNO! "+RESET);
+	    typeWriter("GAME EXITING ...",300 );
+	    clearScreen();
+	    System.exit(0);
 }
 
 public void handlePlayerTurn(Player player) {
@@ -142,7 +151,10 @@ public static Color askForColor() {
 public void printGameState(Player player){
 	clearScreen();
 	showMessage(BOLD+BLACK+"==============================================");
-	showMessage(BG_BLACK + WHITE + BOLD +"it is your turn : "+player.getName()+""+RESET);
+	showMessage(BG_BLACK + WHITE + BOLD +"it is your turn : "+BRIGHT_YELLOW +BOLD+player.getName()+""+RESET);
+	sleep(700);
+	showMessage("-----------------------------------");
+	waitForNextPlayer();
 	showMessage("-----------------------------------");
 	sleep(700);
 	showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this));
@@ -161,6 +173,15 @@ public void printGameState(Player player){
 		
 	}
 	}
+
+public void waitForNextPlayer() {
+    if (scanner.hasNextLine()) {
+        scanner.nextLine(); 
+    }
+    showMessage(BOLD +">>press ENTER to start your turn." + RESET);
+    scanner.nextLine(); 
+}
+
 public void printGameState(Card withdrawncard) {
 		System.out.println("Your withdrawn card is : "+withdrawncard.display(this));
 		sleep(1000);
@@ -250,7 +271,7 @@ public void sleep(int delay) {
 }
 
 public void clearScreen() {
-	for (int i = 0; i < 25; i++) {
+	for (int i = 0; i < 30; i++) {
 		showMessage("");
 	}
 }
