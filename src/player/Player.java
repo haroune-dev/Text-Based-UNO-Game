@@ -1,17 +1,18 @@
 package player;
 import java.util.ArrayList;
 import cards.*;
-
 import enumTypes.Color;
 
 public class Player {
     
     private String name;
     private int score;          
-    private PlayerHand hand = new PlayerHand(); 
+    private PlayerHand hand = new PlayerHand();
+    private boolean isBot;
     
-    public Player(String name){
+    public Player(String name,boolean isBot){
         this.name = name; 
+        this.isBot=isBot;
     }
 
     public String getName(){
@@ -20,6 +21,10 @@ public class Player {
 
     public int getScore() {
         return this.score;
+    }
+    
+    public boolean isBot() {
+    		return isBot;
     }
     
     public ArrayList<Card> PlayableCards(Card card, Color color) {
