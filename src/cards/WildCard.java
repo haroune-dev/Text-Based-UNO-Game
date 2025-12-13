@@ -15,6 +15,9 @@ public abstract class WildCard extends Card {
     public String display(GameSession session) {
         return session.colorize(this.toString(), chosenColor);
     }
+    public String displayChosenColor(GameSession session) {
+        return session.colorizeChosenColor(chosenColor);
+    }
 }
 
 		

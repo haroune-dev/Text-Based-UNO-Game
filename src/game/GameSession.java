@@ -4,6 +4,8 @@ import cards.*;
 import deck.DiscardPile;
 import deck.DrawPile;
 import java.util.ArrayList;
+import java.util.Comparator;
+
 import enumTypes.Color;
 import player.*;
 
@@ -62,17 +64,16 @@ public void run() {
 			typeWriter("========== UNO GAME ==========", 200);
 			showMessage(BOLD+UNDERLINE+"the game modes : "+RESET);
 			showMessage("");
-			showMessage("1. Playeer VS Compuer");
+			showMessage("1. Playeer VS BOT");
 			showMessage("2. Two Players");
 			showMessage("3. Three Players");
 			showMessage("4. Four Players");
 			showMessage("");
-			playersize=getInput(">> Chose the game mode (1-4)",1,4);
+			playersize=getInput(BOLD+">> Chose the game mode (1-4)",1,4);
 			ArrayList<Player> players = new ArrayList<>(playersize);
 			if (playersize == 1) {
 			    showMessage(">> Give the name of the"+BOLD+" player");
 			    name=scanner.next();
-			    scanner.nextLine(); 
 			    players.add(new Player(name, false)); 
 			    players.add(new Player("BOT", true)); 
 			} else {
@@ -98,14 +99,15 @@ public void run() {
 			}
 			}
 		Player winner = controller.getCurrentPlayer();
-		showMessage(YELLOW+" 🏆 "+RESET+BOLD+" Congratulation " +BG_BLACK +BRIGHT_YELLOW +winner.getName() +RESET+BOLD+"You won this Round");
+		showMessage(YELLOW+" 🏆 "+RESET+BOLD+" Congratulation " +BG_BLACK +BRIGHT_YELLOW +winner.getName() +RESET+BOLD+" You won this Round");
 		winner.incrementScore(500);
-		showMessage(BOLD + winner.getName() + " Score: "+BG_BLACK + BRIGHT_YELLOW + winner.getScore() + RESET);
+		showMessage(BOLD + winner.getName() + " Score : "+BG_BLACK + BRIGHT_YELLOW + winner.getScore() + RESET);
+		printLeaderboard(players);
 		newRound=getInput("play a new Round"+GREEN+ "[1] yse "+RESET+ RED +"[0] exit "+RESET,0,1);
 	}
 			play=getInput(BOLD+"Start new game with new playes enter"+RESET +GREEN+ "[1] yse "+RESET+ RED +"[0] exit "+RESET,0,1);
+			clearScreen();
 }
-		clearScreen();
 	    showMessage(BOLD+" Thanks for playing UNO! "+RESET);
 	    typeWriter("GAME EXITING ...",300 );
 	    clearScreen();
@@ -129,8 +131,8 @@ public void handlePlayerTurn(Player player) {
 		withdrawncard=controller.drawACard();
 		printGameState(withdrawncard);
 		if(controller.isValidMove(withdrawncard)) {
-			waitToFinishPlayerTurn(player.isBot());
 			controller.handlePlayerCard(withdrawncard);
+			waitToFinishPlayerTurn(player.isBot());
 		}else {
 			waitToFinishPlayerTurn(player.isBot());
 			controller.nextTurn();
@@ -143,24 +145,24 @@ public void printGameState(Player player){
 	clearScreen();
 	showMessage(BOLD+BLACK+"==============================================");
 	showMessage(BG_BLACK + WHITE + BOLD +"it is your turn : "+BRIGHT_YELLOW +BOLD+player.getName()+""+RESET);
-	sleep(700);
+	sleep(800);
 	showMessage("-----------------------------------");
 	waitForNextPlayer(player.isBot());
 	showMessage("-----------------------------------");
-	sleep(700);
-	showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this));
+	sleep(800);
+	showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this)+RESET);
 	showMessage("-----------------------------------");
-	sleep(2000);
+	sleep(800);
 	printCards(player.getHand().getPlayerHand(),0);
 	showMessage("-----------------------------------");
-	sleep(2000);
+	sleep(800);
 	if(player.hasPlayableCard(controller.getCurrentCard(), controller.getCurrentColor())) {
 		printCards(player.PlayableCards(controller.getCurrentCard(), controller.getCurrentColor()),1);
 		System.out.println("-----------------------------------");
 	}else {
-		showMessage(RED+"you dont hava any playable cards! You must draw."+RESET);
-		sleep(2000);
-		showMessage("DONE");
+		showMessage(RED+BOLD+"you dont hava any playable cards! You must draw..."+RESET);
+		sleep(900);
+		showMessage(BOLD+"DONE"+RESET);
 		
 	}
 	}
@@ -173,20 +175,17 @@ public void printGameState(Card withdrawncard) {
 	}else {
 		showMessage(RED + BOLD +"❌ not matche "+RESET+RED+" You can not play by it"+RESET);
 	}
-	sleep(3000);
+	sleep(1000);
 }
 
 public static Color askForColor() {
 	int chosenCardIndex;
-	Scanner scanner=new Scanner(System.in);
-	System.out.println(">>chose a color for the wild card (1-4)");
-	System.out.println("[1]."+RED+" RED"+RESET);
-	System.out.println("[2]. "+BLUE+"BLUE"+RESET);
-	System.out.println("[3]. "+GREEN+"GREEN"+RESET);
-	System.out.println("[4]. "+YELLOW+"YELLOW"+RESET);
-	do {
-	chosenCardIndex=scanner.nextInt();
-	}while(chosenCardIndex<1 || chosenCardIndex>4);
+	showMessage("chose a color for the wild card (1-4)");
+	showMessage("[1]."+RED+" RED"+RESET);
+	showMessage("[2]. "+BLUE+"BLUE"+RESET);
+	showMessage("[3]. "+GREEN+"GREEN"+RESET);
+	showMessage("[4]. "+YELLOW+"YELLOW"+RESET);
+	chosenCardIndex=getInput(">>",1,4);
 	switch(chosenCardIndex) {
 	case 1:
 		return Color.RED;
@@ -199,27 +198,29 @@ public static Color askForColor() {
 	
 	case 4:
 		return Color.YELLOW;
+	default:
+		return Color.RED;
 	}
-	return Color.RED;
 }
 
 public void handleBotTurn(Player player) {
     int chosenCardIndex;
     Card chosenCard;
-    Card withdrawncard;
+    Card withdrawnCard;
     		printBotGameState(player);
     			if(player.hasPlayableCard(controller.getCurrentCard(), controller.getCurrentColor())) {
         chosenCardIndex = controller.BotChooseCardIndex(player);
         chosenCard=player.PlayableCards(controller.getCurrentCard(), controller.getCurrentColor()).get(chosenCardIndex);
-        printBotPlyedCard(chosenCard);
         controller.handlePlayerCard(chosenCard);
+        printBotPlayedCard(chosenCard);
         waitToFinishPlayerTurn(player.isBot());
     } else {
-        withdrawncard = controller.drawACard();
-        printBotGameState(withdrawncard);
-        if (controller.isValidMove(withdrawncard)) {
+        withdrawnCard = controller.drawACard();
+        printBotGameState(withdrawnCard);
+        if (controller.isValidMove(withdrawnCard)) {
+        	    controller.handlePlayerCard(withdrawnCard);
+        	    printBotwithdrawnCard(withdrawnCard);
         		waitToFinishPlayerTurn(player.isBot());
-            controller.handlePlayerCard(withdrawncard);
         } else {
         		waitToFinishPlayerTurn(player.isBot());
             controller.nextTurn();
@@ -232,16 +233,16 @@ public void printBotGameState(Player player) {
 		showMessage(BOLD+BLACK+"==============================================");
 		showMessage(BG_BLACK + WHITE + BOLD +"it is your turn : "+BRIGHT_YELLOW +BOLD+player.getName()+""+RESET);
 		showMessage("-----------------------------------");
-		sleep(700);
+		sleep(800);
 		waitForNextPlayer(player.isBot());
 		showMessage("-----------------------------------");
-		showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this));
+		showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this)+RESET);
 		showMessage("-----------------------------------");
-		sleep(2000);
+		sleep(1000);
 		if(!player.hasPlayableCard(controller.getCurrentCard(), controller.getCurrentColor())){
-			showMessage(RED+"The Bot does not have any playable cards! The Bot must draw."+RESET);
-			sleep(2000);
-			showMessage("DONE");
+			showMessage(RED+BOLD+"The Bot does not have any playable cards! The Bot must draw..."+RESET);
+			sleep(1000);
+			showMessage(BOLD+"DONE"+RESET);
 			
 		}
 	}
@@ -250,20 +251,34 @@ public void printBotGameState(Card withdrawncard) {
 	sleep(1000);
 	if(controller.isValidMove(withdrawncard)) {
 		showMessage(GREEN + BOLD+"✅ matche "+RESET+GREEN+"The Bot can play by it!"+RESET);
-		sleep(800);
-		showMessage("-----------------------------------");
-		showMessage("BOT plays the drawn card: " + withdrawncard.display(this));
 		showMessage("-----------------------------------");
 	}else {
 		showMessage(RED + BOLD +"❌ not matche "+RESET+RED+" the bot can not play by it"+RESET);
 		showMessage("-----------------------------------");
 }
-sleep(3000);
+sleep(1000);
 }
 
-public void printBotPlyedCard(Card playedCard) {
-	showMessage(BOLD+"The Bot play : "+RESET +playedCard.display(this));
+public void printBotPlayedCard(Card playedCard) {
+	showMessage(BOLD+" The Bot play : "+playedCard.display(this));
 	showMessage("-----------------------------------");
+	if(playedCard instanceof WildCard) {
+		sleep(800);
+		showMessage(BOLD+" the Bot chose the color "+((WildCard)playedCard).displayChosenColor(this));
+		showMessage("-----------------------------------");
+	}
+}
+
+public void printBotwithdrawnCard(Card withdrawnCard) {
+	if(controller.isValidMove(withdrawnCard)){
+	showMessage(BOLD+"BOT plays the drawn card: : "+withdrawnCard.display(this)+RESET);
+	showMessage("-----------------------------------");
+	if(withdrawnCard instanceof WildCard) {
+		sleep(800);
+		showMessage(BOLD+" the Bot chose the color "+((WildCard)withdrawnCard).displayChosenColor(this)+RESET);
+		showMessage("-----------------------------------");
+	}
+}
 }
 
 public void waitForNextPlayer(boolean isBot) {
@@ -311,7 +326,7 @@ public void printRound(int round) {
     sleep(1000);
 }
 
-public int getInput(String string,int min,int max) {
+public static int getInput(String string,int min,int max) {
 	int input;
 	int cpt=1;
 	do {
@@ -331,7 +346,7 @@ public int getInput(String string,int min,int max) {
 	return input;
 }
 
-public void showMessage(Object obj) {
+public static void showMessage(Object obj) {
 	System.out.println(obj);
 }
 public void typeWriter(String text, int delay) {
@@ -354,6 +369,43 @@ public  String colorize(String text, Color color) {
     
 }
 
+public String colorizeChosenColor(Color ChosenColor) {
+    switch (ChosenColor) {
+    case RED: return RED + ChosenColor.toString() + RESET;
+    case BLUE: return BLUE + ChosenColor.toString() + RESET;
+    case GREEN: return GREEN + ChosenColor.toString() + RESET;
+    case YELLOW: return YELLOW + ChosenColor.toString() + RESET;
+    default: return ChosenColor.toString();
+}
+}
+
+public void printLeaderboard(ArrayList<Player> players) {
+	String rank;
+	ArrayList<Player> rankedPlayers = new ArrayList<>(players);
+	rankedPlayers.sort(Comparator.comparingInt(Player::getScore).reversed());
+	showMessage(BOLD +"\n======"+RESET+BOLD+ BG_BLACK +BRIGHT_YELLOW +" 🏆 LEADERBOARD 🏆 "+RESET+BOLD+"======\n" + RESET);
+	for (int i = 0; i < rankedPlayers.size(); i++) {
+		switch(i) {
+			case 0:
+				rank="First";
+				break;
+			case 1:
+				rank="Second";
+				break;
+			case 2:
+				rank="third";
+				break;
+			case 3:
+				rank="fourth";
+				break;
+			default:
+				rank="first";
+		}
+		showMessage(rank+"  :  " +rankedPlayers.get(i).getName()+"    |   "+rankedPlayers.get(i).getScore());
+		}
+		showMessage(BOLD+"===============================\n" + RESET);
+}
+
 
 public void sleep(int delay) {
     try {
@@ -364,9 +416,7 @@ public void sleep(int delay) {
 }
 
 public void clearScreen() {
-	for (int i = 0; i < 30; i++) {
-		showMessage("");
-	}
+		showMessage("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
 }
 
 }
