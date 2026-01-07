@@ -62,6 +62,14 @@ public class Player {
         this.score += score;
     }
     
+    public boolean shouldSayUno() {
+    	if(getHand().handsize()==1) {
+    		return true;
+    	}else {
+    		return false;
+    	}
+    }
+    
     public boolean hasWon() {
         return hand.isEmpty();
     }

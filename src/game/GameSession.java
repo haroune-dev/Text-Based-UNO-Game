@@ -22,30 +22,10 @@ public static final String GREEN   = "\u001B[32m";
 public static final String YELLOW  = "\u001B[33m";
 public static final String BLUE    = "\u001B[34m";
 public static final String WHITE   = "\u001B[37m";
-
-public static final String BRIGHT_CYAN    = "\u001B[96m";
 public static final String BRIGHT_YELLOW  = "\u001B[93m";
-public static final String BRIGHT_WHITE   = "\u001B[97m";
 
 public static final String BG_BLACK   = "\u001B[40m";
 public static final String BG_RED     = "\u001B[41m";
-public static final String BG_GREEN   = "\u001B[42m";
-public static final String BG_YELLOW  = "\u001B[43m";
-public static final String BG_BLUE    = "\u001B[44m";
-public static final String BG_MAGENTA = "\u001B[45m";
-public static final String BG_CYAN    = "\u001B[46m";
-public static final String BG_WHITE   = "\u001B[47m";
-
-public static final String BG_BRIGHT_BLACK   = "\u001B[100m";
-public static final String BG_BRIGHT_RED     = "\u001B[101m";
-public static final String BG_BRIGHT_GREEN   = "\u001B[102m";
-public static final String BG_BRIGHT_YELLOW  = "\u001B[103m";
-public static final String BG_BRIGHT_BLUE    = "\u001B[104m";
-public static final String BG_BRIGHT_MAGENTA = "\u001B[105m";
-public static final String BG_BRIGHT_CYAN    = "\u001B[106m";
-public static final String BG_BRIGHT_WHITE   = "\u001B[107m";
-
-
 
 private GameController controller;
 private static Scanner scanner= new Scanner(System.in);
@@ -57,7 +37,7 @@ public void run() {
 	int playersize;
 	String name;
 	
-	play=getInput(BOLD+"start playing? "+GREEN+ "[1] yse "+RESET+ RED +"[0] exit "+RESET,0,1);
+	play=getInput(BOLD+"start playing? "+GREEN+ "[1] yes "+RESET+ RED +"[0] exit "+RESET,0,1);
 	while(play==1) {
 			roundNumber=0;
 			newRound=1;
@@ -102,7 +82,7 @@ public void run() {
 		showMessage(YELLOW+" 🏆 "+RESET+BOLD+" Congratulation " +BG_BLACK +BRIGHT_YELLOW +winner.getName() +RESET+BOLD+" You won this Round");
 		winner.incrementScore(500);
 		showMessage(BOLD + winner.getName() + " Score : "+BG_BLACK + BRIGHT_YELLOW + winner.getScore() + RESET);
-		printLeaderboard(players);
+		printLeaderBoard(players);
 		newRound=getInput("play a new Round"+GREEN+ "[1] yse "+RESET+ RED +"[0] exit "+RESET,0,1);
 	}
 			play=getInput(BOLD+"Start new game with new playes enter"+RESET +GREEN+ "[1] yse "+RESET+ RED +"[0] exit "+RESET,0,1);
@@ -126,15 +106,15 @@ public void handlePlayerTurn(Player player) {
 	chosenCardIndex=getInput(BOLD+"chose a playabe card (1-"+max+")",1,max);
 	chosenCard=player.PlayableCards(controller.getCurrentCard(), controller.getCurrentColor()).get(chosenCardIndex-1);
 	controller.handlePlayerCard(chosenCard);
-	waitToFinishPlayerTurn(player.isBot());
+	waitToFinishPlayerTurn(player);
 	}else {
 		withdrawncard=controller.drawACard();
 		printGameState(withdrawncard);
 		if(controller.isValidMove(withdrawncard)) {
 			controller.handlePlayerCard(withdrawncard);
-			waitToFinishPlayerTurn(player.isBot());
+			waitToFinishPlayerTurn(player);
 		}else {
-			waitToFinishPlayerTurn(player.isBot());
+			waitToFinishPlayerTurn(player);
 			controller.nextTurn();
 		}
 		
@@ -152,6 +132,8 @@ public void printGameState(Player player){
 	sleep(800);
 	showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this)+RESET);
 	showMessage("-----------------------------------");
+	sleep(800);
+	printPenalty(player.getHand().getPlayerHand(),player);
 	sleep(800);
 	printCards(player.getHand().getPlayerHand(),0);
 	showMessage("-----------------------------------");
@@ -213,16 +195,16 @@ public void handleBotTurn(Player player) {
         chosenCard=player.PlayableCards(controller.getCurrentCard(), controller.getCurrentColor()).get(chosenCardIndex);
         controller.handlePlayerCard(chosenCard);
         printBotPlayedCard(chosenCard);
-        waitToFinishPlayerTurn(player.isBot());
+        waitToFinishPlayerTurn(player);
     } else {
         withdrawnCard = controller.drawACard();
         printBotGameState(withdrawnCard);
         if (controller.isValidMove(withdrawnCard)) {
         	    controller.handlePlayerCard(withdrawnCard);
         	    printBotwithdrawnCard(withdrawnCard);
-        		waitToFinishPlayerTurn(player.isBot());
+        		waitToFinishPlayerTurn(player);
         } else {
-        		waitToFinishPlayerTurn(player.isBot());
+        		waitToFinishPlayerTurn(player);
             controller.nextTurn();
         }
     }
@@ -237,6 +219,9 @@ public void printBotGameState(Player player) {
 		waitForNextPlayer(player.isBot());
 		showMessage("-----------------------------------");
 		showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this)+RESET);
+		showMessage("-----------------------------------");
+		sleep(1000);
+		printPenalty(player.getHand().getPlayerHand(), player);
 		showMessage("-----------------------------------");
 		sleep(1000);
 		if(!player.hasPlayableCard(controller.getCurrentCard(), controller.getCurrentColor())){
@@ -290,23 +275,70 @@ public void waitForNextPlayer(boolean isBot) {
     scanner.nextLine(); 
 }
 
-public void waitToFinishPlayerTurn(boolean isBot) {
-    if(!isBot) {
-    showMessage(BOLD +">>press ENTER to finish your turn." + RESET);
+public void waitToFinishPlayerTurn(Player player) {
+	String input;
+    if(!player.isBot()) {
+    showMessage(BOLD +">> press any thing to finish your turn." + RESET);
+    input=scanner.nextLine().trim();
+    if(player.shouldSayUno()) {
+    	if(!input.equalsIgnoreCase("uno")) {
+    		showMessage(BOLD+RED+" ❌ You forget to say UNO! penalty "+RESET+BOLD+": draw two cards "+RESET);
+    		controller.drawACard();
+    		controller.drawACard();
+    	}
+    		else {
+    			showMessage(BOLD+GREEN+"✅"+RESET);
+    			sleep(800);
+    		}
+    	}
     }else {
-    	showMessage(BOLD +">>press ENTER to finish Bot turn." + RESET);
+    	if(player.shouldSayUno()) {
+    		showMessage(BOLD+">> UNO! "+RESET);
+    		sleep(1000);
+    	}
+    	showMessage(BOLD +">> press any thing to finish Bot turn." + RESET);
+    	scanner.nextLine(); 
     }
-    scanner.nextLine(); 
 }
 
-
+public void printPenalty(ArrayList<Card> hand,Player player) {
+	if(controller.getCurrentCard() instanceof DrawTwoCard ) {
+		if(player.isBot()) {
+			showMessage(BOLD+RED+"BOT penalty "+RESET+BOLD+": draw two cards"+RESET);
+			sleep(800);
+			showMessage("-----------------------------------");
+		}else {
+		showMessage(BOLD+RED+"penalty "+RESET+BOLD+": draw two cards"+RESET);
+		sleep(800);
+		showMessage("-----------------------------------");
+		ArrayList<Card> withdrawnCards = new ArrayList<>(hand.subList(hand.size()-2, hand.size()));
+		printCards(withdrawnCards,2);
+		}
+	}else {
+		if(controller.getCurrentCard() instanceof WildColorDrawFourCard) {
+			if(player.isBot()) {
+			showMessage(BOLD+RED+"BOT penalty "+RESET+BOLD+": draw four cards"+RESET);
+			sleep(800);
+			showMessage("-----------------------------------");
+			}else {
+				showMessage(BOLD+RED+"penalty "+RESET+BOLD+": draw four cards"+RESET);
+				sleep(800);
+				showMessage("-----------------------------------");
+				ArrayList<Card> withdrawnCards = new ArrayList<>(hand.subList(hand.size()-4, hand.size()));
+				printCards(withdrawnCards,2);
+			}
+	}
+	}
+}
 
 public void printCards(ArrayList<Card> hand,int x) {
 	if(x==0) {
 	showMessage(BOLD + "Your cards:" + RESET);
-	}else {
+	}else if(x==1){
 		showMessage(BOLD + "Your plyable cards :" + RESET);
-	}
+		}else {
+			showMessage(BOLD + "Your withdrawn cards:" + RESET);
+		}
 
     for (int i = 0; i < hand.size(); i++) {
         Card card = hand.get(i);
@@ -379,7 +411,7 @@ public String colorizeChosenColor(Color ChosenColor) {
 }
 }
 
-public void printLeaderboard(ArrayList<Player> players) {
+public void printLeaderBoard(ArrayList<Player> players) {
 	String rank;
 	ArrayList<Player> rankedPlayers = new ArrayList<>(players);
 	rankedPlayers.sort(Comparator.comparingInt(Player::getScore).reversed());
@@ -416,7 +448,9 @@ public void sleep(int delay) {
 }
 
 public void clearScreen() {
-		showMessage("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n");
+	for(int i=0;i<15;i++) {
+		showMessage("\n");
+	}
 }
 
 }

@@ -4,7 +4,7 @@ import enumTypes.Color;
 import game.GameSession;
 
 public abstract class WildCard extends Card {
-    protected Color chosenColor=Color.Black;
+    protected Color chosenColor=Color.BLACK;
     public void setColor(Color color) {
         this.chosenColor = color;
     }

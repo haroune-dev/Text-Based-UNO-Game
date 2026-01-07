@@ -41,7 +41,9 @@ public void startGame() {
 	this.discardPile.addCard(drawPile.drawCard());
 	this.currentCard=discardPile.getTopCard();
 	}
-	this.currentColor=((ColoredCard) this.currentCard).getColor();
+	this.currentPlayerIndex=players.size()-1;
+	this.currentCard.applyEffect(this);
+	this.nextTurn();
 }
 
 public void handlePlayerCard(Card playedCard) {
@@ -123,7 +125,6 @@ public Card drawACard() {
 	this.getCurrentPlayer().getHand().addCard(withdrawncard);
 	return withdrawncard;
 }
-
 public int BotChooseCardIndex(Player botPlayer) {
     ArrayList<Card> playableCards = botPlayer.PlayableCards(this.currentCard, this.currentColor);
     ArrayList<Card> wildCards = new ArrayList<>();
