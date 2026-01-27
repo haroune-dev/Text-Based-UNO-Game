@@ -36,10 +36,11 @@ public void startGame() {
 	this.discardPile.addCard(drawPile.drawCard());
 	this.currentCard=discardPile.getTopCard();
 	while(currentCard instanceof WildCard) {
-	this.drawPile.addCard(currentCard);
-	this.drawPile.shuffle();
-	this.discardPile.addCard(drawPile.drawCard());
-	this.currentCard=discardPile.getTopCard();
+	    this.drawPile.addCard(currentCard);
+	    this.discardPile.removeTopCard();
+	    this.drawPile.shuffle();
+	    this.discardPile.addCard(drawPile.drawCard());
+	    this.currentCard=discardPile.getTopCard();
 	}
 	this.currentPlayerIndex=players.size()-1;
 	this.currentCard.applyEffect(this);
@@ -209,6 +210,7 @@ public Color BotChooseColor(Player botPlayer) {
     if (green > red && green > blue && green >= yellow) return Color.GREEN;
     return Color.YELLOW;
 }
+
 public Card getCurrentCard() {
 	return currentCard;
 }

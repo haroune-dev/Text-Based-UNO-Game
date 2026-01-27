@@ -127,7 +127,7 @@ public void printGameState(Player player){
 	showMessage(BG_BLACK + WHITE + BOLD +"it is your turn : "+BRIGHT_YELLOW +BOLD+player.getName()+""+RESET);
 	sleep(800);
 	showMessage("-----------------------------------");
-	waitForNextPlayer(player.isBot());
+	waitToStartPlayerTurn(player.isBot());
 	showMessage("-----------------------------------");
 	sleep(800);
 	showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this)+RESET);
@@ -216,10 +216,9 @@ public void printBotGameState(Player player) {
 		showMessage(BG_BLACK + WHITE + BOLD +"it is your turn : "+BRIGHT_YELLOW +BOLD+player.getName()+""+RESET);
 		showMessage("-----------------------------------");
 		sleep(800);
-		waitForNextPlayer(player.isBot());
+		waitToStartPlayerTurn(player.isBot());
 		showMessage("-----------------------------------");
 		showMessage(BOLD+"the top card is : "+controller.getCurrentCard().display(this)+RESET);
-		showMessage("-----------------------------------");
 		sleep(1000);
 		printPenalty(player.getHand().getPlayerHand(), player);
 		showMessage("-----------------------------------");
@@ -266,7 +265,7 @@ public void printBotwithdrawnCard(Card withdrawnCard) {
 }
 }
 
-public void waitForNextPlayer(boolean isBot) {
+public void waitToStartPlayerTurn(boolean isBot) {
     if(!isBot) {
     showMessage(BOLD +">>press ENTER to start your turn." + RESET);
     }else {
@@ -278,7 +277,7 @@ public void waitForNextPlayer(boolean isBot) {
 public void waitToFinishPlayerTurn(Player player) {
 	String input;
     if(!player.isBot()) {
-    showMessage(BOLD +">> press any thing to finish your turn." + RESET);
+    showMessage(BOLD +">> press ENTER to finish your turn." + RESET);
     input=scanner.nextLine().trim();
     if(player.shouldSayUno()) {
     	if(!input.equalsIgnoreCase("uno")) {
@@ -296,7 +295,7 @@ public void waitToFinishPlayerTurn(Player player) {
     		showMessage(BOLD+">> UNO! "+RESET);
     		sleep(1000);
     	}
-    	showMessage(BOLD +">> press any thing to finish Bot turn." + RESET);
+    	showMessage(BOLD +">> press ENTER to finish Bot turn." + RESET);
     	scanner.nextLine(); 
     }
 }
@@ -306,7 +305,6 @@ public void printPenalty(ArrayList<Card> hand,Player player) {
 		if(player.isBot()) {
 			showMessage(BOLD+RED+"BOT penalty "+RESET+BOLD+": draw two cards"+RESET);
 			sleep(800);
-			showMessage("-----------------------------------");
 		}else {
 		showMessage(BOLD+RED+"penalty "+RESET+BOLD+": draw two cards"+RESET);
 		sleep(800);
@@ -319,7 +317,6 @@ public void printPenalty(ArrayList<Card> hand,Player player) {
 			if(player.isBot()) {
 			showMessage(BOLD+RED+"BOT penalty "+RESET+BOLD+": draw four cards"+RESET);
 			sleep(800);
-			showMessage("-----------------------------------");
 			}else {
 				showMessage(BOLD+RED+"penalty "+RESET+BOLD+": draw four cards"+RESET);
 				sleep(800);
@@ -383,11 +380,12 @@ public static void showMessage(Object obj) {
 }
 public void typeWriter(String text, int delay) {
     for (char c : text.toCharArray()) {
-        System.out.print(String.valueOf(c));
-        try { Thread.sleep(delay); } catch (Exception e) {}
+        System.out.print(c);
+        sleep(delay);
     }
     System.out.println("\n");
 }
+
 
 
 public  String colorize(String text, Color color) {
