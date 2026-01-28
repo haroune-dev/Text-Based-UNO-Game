@@ -2,7 +2,7 @@ package cards;
 
 import enumTypes.Color;
 import game.GameSession;
-public class ColoredCard extends Card {
+public abstract class ColoredCard extends Card {
     protected Color color;
 
     public ColoredCard(Color color) {
@@ -16,4 +16,5 @@ public class ColoredCard extends Card {
         return session.colorize(this.toString(), color);
     }
 }
+
 
