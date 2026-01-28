@@ -3,7 +3,7 @@ package cards;
 import enumTypes.Color;
 import game.GameSession;
 
-public class WildCard extends Card {
+public abstract class WildCard extends Card {
     protected Color chosenColor=Color.BLACK;
     public void setColor(Color color) {
         this.chosenColor = color;
@@ -21,5 +21,6 @@ public class WildCard extends Card {
 }
 
 		
+
 
 
