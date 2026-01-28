@@ -28,7 +28,7 @@ public class NumberedColoredCard extends ColoredCard {
        
         return false;
     }
-    
+    @Override
     public void applyEffect(GameController controller) {
     	controller.setCurrentColor(getColor());
     }
